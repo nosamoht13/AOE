@@ -1,0 +1,46 @@
+// THis is the code to drive an servo 90 degrees when a button is pressed. 
+
+#include <Servo.h>
+
+Servo myservo;  // create servo object to control a servo
+#define servoPin 3 //~
+#define pushButtonPin 2 
+
+int angle =90;    // initial angle  for servo
+int angleStep =45;
+const int minAngle = 90;
+const int maxAngle = 180;
+
+int buttonPushed =0;
+
+void setup() {
+  // Servo button demo by Robojax.com
+  Serial.begin(9600);          //  setup serial
+  myservo.attach(servoPin);  // attaches the servo on pin 3 to the servo object
+  pinMode(pushButtonPin,INPUT_PULLUP);
+   Serial.println("Robojax Servo Button ");
+}
+
+void loop() {
+  if(digitalRead(pushButtonPin) == LOW){
+    buttonPushed = 1;
+  }
+   if( buttonPushed ){
+  // change the angle for next time through the loop:
+  angle = angle + angleStep;
+
+    // reverse the direction of the moving at the ends of the angle:
+    if (angle <= minAngle || angle >= maxAngle) {
+      angleStep = -angleStep;
+       buttonPushed = 0;
+    }
+    myservo.write(angle); // move the servo to desired angle
+      Serial.print("Moved to: ");
+      Serial.print(angle);   // print the angle
+      Serial.println(" degree");    
+  delay(100); // waits for the servo to get there
+   }
+
+  
+}
+ 
